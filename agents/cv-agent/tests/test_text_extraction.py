@@ -45,6 +45,23 @@ def test_extraire_texte_docx(tmp_path: Path) -> None:
     assert "Acme Corp" in texte
 
 
+def test_extraire_texte_docx_lit_le_contenu_des_tableaux(tmp_path: Path) -> None:
+    # Bug réel : beaucoup de CV mettent le nom/contact et une grille de compétences
+    # dans des tableaux Word, invisibles via `document.paragraphs` seul.
+    chemin = tmp_path / "cv.docx"
+    document = docx.Document()
+    document.add_paragraph("Profil")
+    table = document.add_table(rows=1, cols=2)
+    table.rows[0].cells[0].text = "Jean Dupont"
+    table.rows[0].cells[1].text = "jean.dupont@example.com"
+    document.save(str(chemin))
+
+    texte = extraire_texte(chemin)
+
+    assert "Jean Dupont" in texte
+    assert "jean.dupont@example.com" in texte
+
+
 def test_extraire_texte_format_non_supporte(tmp_path: Path) -> None:
     chemin = tmp_path / "cv.txt"
     chemin.write_text("contenu", encoding="utf-8")

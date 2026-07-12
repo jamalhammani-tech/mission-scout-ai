@@ -8,6 +8,7 @@ import anthropic
 from memory_agent.db import session_scope
 from memory_agent.logging_config import configure_logging
 from pydantic import ValidationError
+from sqlalchemy.exc import OperationalError
 
 from cv_agent.import_cv import ResultatImportCv, importer_cv
 from cv_agent.llm_extraction import AnthropicLlmExtractor
@@ -84,6 +85,16 @@ def main(argv: list[str] | None = None) -> None:
             )
     except ValueError as exc:
         print(f"Erreur : {exc}", file=sys.stderr)
+        sys.exit(1)
+    except OperationalError as exc:
+        print(
+            f"Erreur : impossible de se connecter à la base de données ({exc.orig}). "
+            "PostgreSQL est-il démarré ? (docker compose up -d, ou service postgresql start)",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    except anthropic.APIError as exc:
+        print(f"Erreur : l'appel à l'API Anthropic a échoué ({exc}).", file=sys.stderr)
         sys.exit(1)
 
     _afficher_resultat(resultat)

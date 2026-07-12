@@ -4,6 +4,7 @@ from functools import lru_cache
 from typing import Protocol
 
 import anthropic
+from pydantic import ValidationError
 
 from cv_agent.schemas import CvExtraction
 from cv_agent.settings import REPO_ROOT
@@ -30,6 +31,23 @@ def _schema_outil() -> dict[str, object]:
     }
 
 
+def _valider_extraction(donnees: dict[str, object]) -> CvExtraction:
+    """Valide `donnees` en `CvExtraction`.
+
+    Le modèle imbrique parfois sa réponse sous une unique clé wrapper (observé sur des CV
+    longs/complexes, ex. `{"cv_extraction": {...}}`) au lieu de renvoyer les champs à plat
+    comme demandé par le schéma. On retente alors sur cette valeur imbriquée.
+    """
+    try:
+        return CvExtraction.model_validate(donnees)
+    except ValidationError:
+        if len(donnees) == 1:
+            (valeur_unique,) = donnees.values()
+            if isinstance(valeur_unique, dict):
+                return CvExtraction.model_validate(valeur_unique)
+        raise
+
+
 class AnthropicLlmExtractor:
     def __init__(self, client: anthropic.Anthropic, model: str) -> None:
         self._client = client
@@ -50,6 +68,6 @@ class AnthropicLlmExtractor:
 
         for bloc in response.content:
             if bloc.type == "tool_use" and bloc.name == _TOOL_NAME:
-                return CvExtraction.model_validate(bloc.input)
+                return _valider_extraction(bloc.input)
 
         raise RuntimeError("La réponse Anthropic ne contient pas l'appel d'outil attendu.")
