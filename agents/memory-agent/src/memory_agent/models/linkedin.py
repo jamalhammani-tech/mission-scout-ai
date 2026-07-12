@@ -14,7 +14,9 @@ class LinkedInProfileModel(Base, UUIDPk, Timestamped):
 
     __tablename__ = "linkedin_profiles"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False
+    )
 
     titre_affiche: Mapped[str | None] = mapped_column(String(255), nullable=True)
     resume: Mapped[str | None] = mapped_column(String(4000), nullable=True)
@@ -26,8 +28,12 @@ class LinkedInPostModel(Base, UUIDPk, Timestamped):
 
     __tablename__ = "linkedin_posts"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    linkedin_profile_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("linkedin_profiles.id", ondelete="CASCADE"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    linkedin_profile_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("linkedin_profiles.id", ondelete="CASCADE"), nullable=False
+    )
 
     contenu: Mapped[str] = mapped_column(String(8000), nullable=False)
     statut: Mapped[StatutPost] = mapped_column(
@@ -48,11 +54,17 @@ class LinkedInConversationModel(Base, UUIDPk, Timestamped):
 
     __tablename__ = "linkedin_conversations"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    contact_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("contacts.id", ondelete="CASCADE"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    contact_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("contacts.id", ondelete="CASCADE"), nullable=False
+    )
 
     statut: Mapped[StatutConversation] = mapped_column(
-        SAEnum(StatutConversation, native_enum=False, length=20), nullable=False, default=StatutConversation.ACTIVE
+        SAEnum(StatutConversation, native_enum=False, length=20),
+        nullable=False,
+        default=StatutConversation.ACTIVE,
     )
 
     messages: Mapped[list["LinkedInMessageModel"]] = relationship(cascade="all, delete-orphan")

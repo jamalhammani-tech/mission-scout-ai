@@ -14,8 +14,12 @@ class CandidatureModel(Base, UUIDPk, Timestamped):
 
     __tablename__ = "candidatures"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    mission_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("missions.id", ondelete="CASCADE"), unique=True, nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    mission_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("missions.id", ondelete="CASCADE"), unique=True, nullable=False
+    )
     document_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("documents.id"), nullable=True)
 
     statut: Mapped[StatutCandidature] = mapped_column(
@@ -25,16 +29,22 @@ class CandidatureModel(Base, UUIDPk, Timestamped):
     )
 
     entretiens: Mapped[list["EntretienModel"]] = relationship(cascade="all, delete-orphan")
-    statut_historique: Mapped[list["CandidatureStatutHistoriqueModel"]] = relationship(cascade="all, delete-orphan")
+    statut_historique: Mapped[list["CandidatureStatutHistoriqueModel"]] = relationship(
+        cascade="all, delete-orphan"
+    )
     contacts: Mapped[list["CandidatureContactModel"]] = relationship(cascade="all, delete-orphan")
 
 
 class EntretienModel(Base, UUIDPk, Timestamped):
     __tablename__ = "entretiens"
 
-    candidature_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("candidatures.id", ondelete="CASCADE"), nullable=False)
+    candidature_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("candidatures.id", ondelete="CASCADE"), nullable=False
+    )
     statut: Mapped[StatutEntretien] = mapped_column(
-        SAEnum(StatutEntretien, native_enum=False, length=20), nullable=False, default=StatutEntretien.PLANIFIE
+        SAEnum(StatutEntretien, native_enum=False, length=20),
+        nullable=False,
+        default=StatutEntretien.PLANIFIE,
     )
     type: Mapped[str | None] = mapped_column(String(100), nullable=True)
     date_prevue: Mapped[datetime | None] = mapped_column(nullable=True)
@@ -48,7 +58,9 @@ class CandidatureStatutHistoriqueModel(Base, UUIDPk):
 
     __tablename__ = "candidature_statut_historique"
 
-    candidature_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("candidatures.id", ondelete="CASCADE"), nullable=False)
+    candidature_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("candidatures.id", ondelete="CASCADE"), nullable=False
+    )
     statut_precedent: Mapped[StatutCandidature | None] = mapped_column(
         SAEnum(StatutCandidature, native_enum=False, length=30), nullable=True
     )
@@ -62,7 +74,9 @@ class CandidatureStatutHistoriqueModel(Base, UUIDPk):
 class CandidatureContactModel(Base, UUIDPk):
     __tablename__ = "candidature_contacts"
 
-    candidature_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("candidatures.id", ondelete="CASCADE"), nullable=False)
+    candidature_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("candidatures.id", ondelete="CASCADE"), nullable=False
+    )
     contact_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("contacts.id"), nullable=False)
 
     __table_args__ = (UniqueConstraint("candidature_id", "contact_id", name="uq_candidature_contact"),)

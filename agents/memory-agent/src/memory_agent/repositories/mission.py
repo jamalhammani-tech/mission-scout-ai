@@ -31,7 +31,9 @@ class SqlAlchemyMissionRepository:
         return self._to_schema(model) if model else None
 
     def par_source(self, user_id: uuid.UUID, source_type: SourceType) -> list[Mission]:
-        stmt = select(MissionModel).where(MissionModel.user_id == user_id, MissionModel.source_type == source_type)
+        stmt = select(MissionModel).where(
+            MissionModel.user_id == user_id, MissionModel.source_type == source_type
+        )
         return [self._to_schema(m) for m in self.session.execute(stmt).scalars().all()]
 
     def par_statut_de_qualification(self, user_id: uuid.UUID, statut: StatutQualification) -> list[Mission]:
@@ -81,14 +83,14 @@ class SqlAlchemyMissionRepository:
 
         existing_competences = {c.skill_id: c for c in model.competences_requises}
         model.competences_requises = [
-            _merge_competence_requise(existing_competences.get(cr.skill_id), cr) for cr in mission.competences_requises
+            _merge_competence_requise(existing_competences.get(cr.skill_id), cr)
+            for cr in mission.competences_requises
         ]
 
-        existing_contacts = {c.contact_id for c in model.contacts}
-        wanted_contacts = set(mission.contact_ids)
+        existing_contacts = {c.contact_id: c for c in model.contacts}
         model.contacts = [
-            next((c for c in model.contacts if c.contact_id == contact_id), None) or MissionContactModel(contact_id=contact_id)
-            for contact_id in wanted_contacts
+            existing_contacts.get(contact_id, MissionContactModel(contact_id=contact_id))
+            for contact_id in set(mission.contact_ids)
         ]
 
         self.session.flush()
@@ -105,7 +107,12 @@ class SqlAlchemyMissionRepository:
             company_id=model.company_id,
             titre=model.titre,
             description=model.description,
-            tjm=TJM(montant_min=model.tjm_min, montant_max=model.tjm_max, devise=model.tjm_devise, unite=model.tjm_unite),
+            tjm=TJM(
+                montant_min=model.tjm_min,
+                montant_max=model.tjm_max,
+                devise=model.tjm_devise,
+                unite=model.tjm_unite,
+            ),
             statut_qualification=model.statut_qualification,
             score_qualification=model.score_qualification,
             motif_qualification=model.motif_qualification,
@@ -116,7 +123,9 @@ class SqlAlchemyMissionRepository:
                 importe_le=model.source_importe_le,
             ),
             competences_requises=[
-                CompetenceRequise(skill_id=c.skill_id, niveau_requis=c.niveau_requis, obligatoire=c.obligatoire)
+                CompetenceRequise(
+                    skill_id=c.skill_id, niveau_requis=c.niveau_requis, obligatoire=c.obligatoire
+                )
                 for c in model.competences_requises
             ],
             contact_ids=[c.contact_id for c in model.contacts],

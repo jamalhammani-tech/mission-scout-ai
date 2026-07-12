@@ -1,0 +1,39 @@
+# Hooks locaux uniquement : ils invoquent les outils déjà pinnés dans
+# agents/memory-agent/uv.lock (via `uv run`), plutôt que les mirrors GitHub officiels
+# de ruff/mypy — évite un écart de version entre pre-commit et le projet, et fonctionne
+# hors ligne une fois `uv sync` fait. Voir docs/adr/0003-developer-experience-quality.md.
+#
+# Installation (une fois) :
+#   cd agents/memory-agent && uv run pre-commit install --hook-type pre-commit --hook-type pre-push
+
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check (memory-agent)
+        entry: bash -c 'cd agents/memory-agent && uv run ruff check --fix'
+        language: system
+        files: ^agents/memory-agent/.*\.py$
+        pass_filenames: false
+
+      - id: ruff-format
+        name: ruff format (memory-agent)
+        entry: bash -c 'cd agents/memory-agent && uv run ruff format'
+        language: system
+        files: ^agents/memory-agent/.*\.py$
+        pass_filenames: false
+
+      - id: mypy
+        name: mypy (memory-agent)
+        entry: bash -c 'cd agents/memory-agent && uv run mypy src tests'
+        language: system
+        files: ^agents/memory-agent/(src|tests)/.*\.py$
+        pass_filenames: false
+
+      - id: pytest
+        name: pytest (memory-agent)
+        entry: bash -c 'cd agents/memory-agent && uv run pytest'
+        language: system
+        files: ^agents/memory-agent/(src|tests)/.*\.py$
+        pass_filenames: false
+        stages: [pre-push]

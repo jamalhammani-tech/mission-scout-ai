@@ -1,14 +1,14 @@
 """Vocabulaire du domaine (docs/domain-model.md) partagé entre modèles SQLAlchemy et schémas Pydantic."""
 
-from enum import Enum
+from enum import StrEnum
 
 
-class StatutCompte(str, Enum):
+class StatutCompte(StrEnum):
     ACTIF = "actif"
     DESACTIVE = "desactive"
 
 
-class CategorieSkill(str, Enum):
+class CategorieSkill(StrEnum):
     LANGAGE = "langage"
     FRAMEWORK = "framework"
     CLOUD = "cloud"
@@ -17,36 +17,36 @@ class CategorieSkill(str, Enum):
     AUTRE = "autre"
 
 
-class NiveauCompetence(str, Enum):
+class NiveauCompetence(StrEnum):
     JUNIOR = "junior"
     CONFIRME = "confirme"
     EXPERT = "expert"
 
 
-class TypeCritereSkill(str, Enum):
+class TypeCritereSkill(StrEnum):
     RECHERCHE = "recherche"
     EXCLU = "exclu"
 
 
-class RemotePreference(str, Enum):
+class RemotePreference(StrEnum):
     TOTAL = "total"
     PARTIEL = "partiel"
     NON = "non"
 
 
-class TypeContrat(str, Enum):
+class TypeContrat(StrEnum):
     FREELANCE = "freelance"
     PORTAGE = "portage"
     CDI = "cdi"
 
 
-class StatutQualification(str, Enum):
+class StatutQualification(StrEnum):
     NON_QUALIFIEE = "non_qualifiee"
     QUALIFIEE = "qualifiee"
     ECARTEE = "ecartee"
 
 
-class StatutCandidature(str, Enum):
+class StatutCandidature(StrEnum):
     REPEREE = "reperee"
     POSTULEE = "postulee"
     ENTRETIEN_PLANIFIE = "entretien_planifie"
@@ -58,38 +58,38 @@ class StatutCandidature(str, Enum):
     ABANDONNEE = "abandonnee"
 
 
-class StatutEntretien(str, Enum):
+class StatutEntretien(StrEnum):
     PLANIFIE = "planifie"
     REALISE = "realise"
     ANNULE = "annule"
 
 
-class TypeDocument(str, Enum):
+class TypeDocument(StrEnum):
     CV = "cv"
     LETTRE_MOTIVATION = "lettre_motivation"
     PORTFOLIO = "portfolio"
     AUTRE = "autre"
 
 
-class StatutPost(str, Enum):
+class StatutPost(StrEnum):
     BROUILLON = "brouillon"
     PLANIFIE = "planifie"
     PUBLIE = "publie"
     ARCHIVE = "archive"
 
 
-class StatutConversation(str, Enum):
+class StatutConversation(StrEnum):
     ACTIVE = "active"
     SANS_REPONSE = "sans_reponse"
     CLOSE = "close"
 
 
-class ExpediteurMessage(str, Enum):
+class ExpediteurMessage(StrEnum):
     UTILISATEUR = "utilisateur"
     CONTACT = "contact"
 
 
-class SourceType(str, Enum):
+class SourceType(StrEnum):
     LINKEDIN = "linkedin"
     PLATEFORME_FREELANCE = "plateforme_freelance"
     RESEAU_PERSONNEL = "reseau_personnel"
@@ -99,12 +99,12 @@ class SourceType(str, Enum):
     GENERATION_AGENT = "generation_agent"
 
 
-class ActeurType(str, Enum):
+class ActeurType(StrEnum):
     UTILISATEUR = "utilisateur"
     AGENT = "agent"
 
 
-class TaggableEntityType(str, Enum):
+class TaggableEntityType(StrEnum):
     MISSION = "mission"
     CANDIDATURE = "candidature"
     CONTACT = "contact"

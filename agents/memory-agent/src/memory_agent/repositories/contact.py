@@ -70,7 +70,9 @@ class SqlAlchemyContactRepository:
             user_id=model.user_id,
             company_id=model.company_id,
             nom=model.nom,
-            contact_info=ContactInfo(email=model.email, telephone=model.telephone, url_linkedin=model.url_linkedin),
+            contact_info=ContactInfo(
+                email=model.email, telephone=model.telephone, url_linkedin=model.url_linkedin
+            ),
             source=Source(
                 type=model.source_type,
                 reference_externe=model.source_reference_externe,

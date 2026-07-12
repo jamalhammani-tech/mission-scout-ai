@@ -18,16 +18,22 @@ class DocumentModel(Base, UUIDPk, Timestamped):
 
     __tablename__ = "documents"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
     mission_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("missions.id"), nullable=True)
     previous_version_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("documents.id"), nullable=True)
 
-    type: Mapped[TypeDocument] = mapped_column(SAEnum(TypeDocument, native_enum=False, length=30), nullable=False)
+    type: Mapped[TypeDocument] = mapped_column(
+        SAEnum(TypeDocument, native_enum=False, length=30), nullable=False
+    )
     version_label: Mapped[str | None] = mapped_column(String(50), nullable=True)
     reference_fichier: Mapped[str] = mapped_column(String(1000), nullable=False)
 
     # Source (VO, docs/domain-model.md §8)
-    source_type: Mapped[SourceType] = mapped_column(SAEnum(SourceType, native_enum=False, length=30), nullable=False)
+    source_type: Mapped[SourceType] = mapped_column(
+        SAEnum(SourceType, native_enum=False, length=30), nullable=False
+    )
     source_reference_externe: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     source_agent_responsable: Mapped[str | None] = mapped_column(String(100), nullable=True)
     source_importe_le: Mapped[datetime | None] = mapped_column(nullable=True)

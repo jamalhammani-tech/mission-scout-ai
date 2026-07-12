@@ -14,7 +14,9 @@ class MissionModel(Base, UUIDPk, Timestamped):
 
     __tablename__ = "missions"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
     company_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("companies.id"), nullable=False)
 
     titre: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -34,7 +36,9 @@ class MissionModel(Base, UUIDPk, Timestamped):
     motif_qualification: Mapped[str | None] = mapped_column(String(2000), nullable=True)
 
     # Source (VO, docs/domain-model.md §8)
-    source_type: Mapped[SourceType] = mapped_column(SAEnum(SourceType, native_enum=False, length=30), nullable=False)
+    source_type: Mapped[SourceType] = mapped_column(
+        SAEnum(SourceType, native_enum=False, length=30), nullable=False
+    )
     source_reference_externe: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     source_agent_responsable: Mapped[str | None] = mapped_column(String(100), nullable=True)
     source_importe_le: Mapped[datetime | None] = mapped_column(nullable=True)
@@ -61,7 +65,9 @@ class MissionCompetenceRequiseModel(Base, UUIDPk):
 
     __tablename__ = "mission_competences_requises"
 
-    mission_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("missions.id", ondelete="CASCADE"), nullable=False)
+    mission_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("missions.id", ondelete="CASCADE"), nullable=False
+    )
     skill_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("skills.id"), nullable=False)
     niveau_requis: Mapped[NiveauCompetence | None] = mapped_column(
         SAEnum(NiveauCompetence, native_enum=False, length=20), nullable=True
@@ -76,7 +82,9 @@ class MissionContactModel(Base, UUIDPk):
 
     __tablename__ = "mission_contacts"
 
-    mission_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("missions.id", ondelete="CASCADE"), nullable=False)
+    mission_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("missions.id", ondelete="CASCADE"), nullable=False
+    )
     contact_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("contacts.id"), nullable=False)
 
     __table_args__ = (UniqueConstraint("mission_id", "contact_id", name="uq_mission_contact"),)

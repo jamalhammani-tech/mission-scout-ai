@@ -7,6 +7,7 @@ dependencies = [
     "sqlalchemy>=2.0.30",
     "alembic>=1.13",
     "pydantic>=2.7",
+    "pydantic-settings>=2.4",
     "python-dotenv>=1.0",
     "psycopg[binary]>=3.1",
 ]
@@ -21,4 +22,50 @@ packages = ["src/memory_agent"]
 [dependency-groups]
 dev = [
     "pytest>=8.0",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
 ]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle
+    "W",
+    "F",    # pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "SIM",  # flake8-simplify
+    "N",    # pep8-naming
+    "RUF",  # règles spécifiques à ruff
+    "T20",  # interdit print()/pprint() — voir docs/adr/0003
+]
+ignore = [
+    "RUF012", # mutable class attrs (faux positifs sur les colonnes SQLAlchemy)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["memory_agent"]
+
+[tool.ruff.lint.per-file-ignores]
+"migrations/versions/*.py" = ["E501", "I001"]  # fichiers générés par `alembic revision --autogenerate`
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+plugins = ["pydantic.mypy"]
+strict = true
+warn_unused_configs = true
+show_error_codes = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

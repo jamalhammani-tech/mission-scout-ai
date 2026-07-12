@@ -32,7 +32,9 @@ def _get_or_create_tag(session: Session, tag: Tag) -> TagModel:
     return created
 
 
-def sync_tags(session: Session, entity_type: TaggableEntityType, entity_id: uuid.UUID, tags: list[Tag]) -> None:
+def sync_tags(
+    session: Session, entity_type: TaggableEntityType, entity_id: uuid.UUID, tags: list[Tag]
+) -> None:
     stmt = select(EntityTagModel).where(
         EntityTagModel.entity_type == entity_type, EntityTagModel.entity_id == entity_id
     )

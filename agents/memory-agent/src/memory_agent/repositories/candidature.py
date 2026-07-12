@@ -38,7 +38,9 @@ class SqlAlchemyCandidatureRepository:
         return self._to_schema(model) if model else None
 
     def par_statut(self, user_id: uuid.UUID, statut: StatutCandidature) -> list[Candidature]:
-        stmt = select(CandidatureModel).where(CandidatureModel.user_id == user_id, CandidatureModel.statut == statut)
+        stmt = select(CandidatureModel).where(
+            CandidatureModel.user_id == user_id, CandidatureModel.statut == statut
+        )
         return [self._to_schema(m) for m in self.session.execute(stmt).scalars().all()]
 
     def lister_actives(self, user_id: uuid.UUID) -> list[Candidature]:

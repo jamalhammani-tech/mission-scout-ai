@@ -1,9 +1,8 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import JSON
+from sqlalchemy import JSON, ForeignKey, String, UniqueConstraint
 from sqlalchemy import Enum as SAEnum
-from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from memory_agent.enums import NiveauCompetence, RemotePreference, TypeCritereSkill
@@ -15,7 +14,9 @@ class ProfileModel(Base, UUIDPk, Timestamped):
 
     __tablename__ = "profiles"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False
+    )
 
     titre: Mapped[str | None] = mapped_column(String(255), nullable=True)
     resume: Mapped[str | None] = mapped_column(String(4000), nullable=True)
@@ -47,7 +48,9 @@ class ProfileModel(Base, UUIDPk, Timestamped):
 class ExperienceModel(Base, UUIDPk, Timestamped):
     __tablename__ = "experiences"
 
-    profile_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False)
+    profile_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False
+    )
     company_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("companies.id"), nullable=True)
     entreprise_nom: Mapped[str | None] = mapped_column(String(255), nullable=True)
     intitule: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -61,7 +64,9 @@ class ExperienceModel(Base, UUIDPk, Timestamped):
 class ExperienceSkillModel(Base, UUIDPk):
     __tablename__ = "experience_skills"
 
-    experience_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("experiences.id", ondelete="CASCADE"), nullable=False)
+    experience_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("experiences.id", ondelete="CASCADE"), nullable=False
+    )
     skill_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("skills.id"), nullable=False)
 
     __table_args__ = (UniqueConstraint("experience_id", "skill_id", name="uq_experience_skill"),)
@@ -72,9 +77,13 @@ class ProfileCompetenceModel(Base, UUIDPk):
 
     __tablename__ = "profile_competences"
 
-    profile_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False)
+    profile_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False
+    )
     skill_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("skills.id"), nullable=False)
-    niveau: Mapped[NiveauCompetence] = mapped_column(SAEnum(NiveauCompetence, native_enum=False, length=20), nullable=False)
+    niveau: Mapped[NiveauCompetence] = mapped_column(
+        SAEnum(NiveauCompetence, native_enum=False, length=20), nullable=False
+    )
     annees_experience: Mapped[int | None] = mapped_column(nullable=True)
 
     __table_args__ = (UniqueConstraint("profile_id", "skill_id", name="uq_profile_competence"),)
@@ -85,8 +94,12 @@ class ProfileCriteriaSkillModel(Base, UUIDPk):
 
     __tablename__ = "profile_criteria_skills"
 
-    profile_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False)
+    profile_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False
+    )
     skill_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("skills.id"), nullable=False)
-    type: Mapped[TypeCritereSkill] = mapped_column(SAEnum(TypeCritereSkill, native_enum=False, length=20), nullable=False)
+    type: Mapped[TypeCritereSkill] = mapped_column(
+        SAEnum(TypeCritereSkill, native_enum=False, length=20), nullable=False
+    )
 
     __table_args__ = (UniqueConstraint("profile_id", "skill_id", "type", name="uq_profile_criteria_skill"),)

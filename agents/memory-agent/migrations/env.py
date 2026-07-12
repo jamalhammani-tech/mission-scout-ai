@@ -3,15 +3,15 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from memory_agent.config import get_database_url
 from memory_agent.models import Base
+from memory_agent.settings import get_settings
 
 config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option("sqlalchemy.url", get_database_url())
+config.set_main_option("sqlalchemy.url", get_settings().resolved_database_url)
 
 target_metadata = Base.metadata
 

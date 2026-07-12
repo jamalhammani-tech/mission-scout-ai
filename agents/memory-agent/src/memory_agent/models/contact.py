@@ -14,7 +14,9 @@ class ContactModel(Base, UUIDPk, Timestamped):
 
     __tablename__ = "contacts"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
     company_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("companies.id"), nullable=True)
 
     nom: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -25,7 +27,9 @@ class ContactModel(Base, UUIDPk, Timestamped):
     url_linkedin: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     # Source (VO, docs/domain-model.md §8)
-    source_type: Mapped[SourceType] = mapped_column(SAEnum(SourceType, native_enum=False, length=30), nullable=False)
+    source_type: Mapped[SourceType] = mapped_column(
+        SAEnum(SourceType, native_enum=False, length=30), nullable=False
+    )
     source_reference_externe: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     source_agent_responsable: Mapped[str | None] = mapped_column(String(100), nullable=True)
     source_importe_le: Mapped[datetime | None] = mapped_column(nullable=True)

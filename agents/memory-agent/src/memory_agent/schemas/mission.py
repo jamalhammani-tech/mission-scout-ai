@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from memory_agent.enums import NiveauCompetence, StatutQualification
-from memory_agent.schemas.common import SchemaBase, Source, Tag, TJM
+from memory_agent.schemas.common import TJM, SchemaBase, Source, Tag
 
 
 class CompetenceRequise(SchemaBase):

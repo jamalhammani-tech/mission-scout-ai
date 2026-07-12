@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  quality:
+    name: Ruff, MyPy, Pytest (memory-agent)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agents/memory-agent
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Ruff check
+        run: uv run ruff check .
+
+      - name: Ruff format --check
+        run: uv run ruff format --check .
+
+      - name: MyPy
+        run: uv run mypy src tests
+
+      - name: Pytest
+        run: uv run pytest

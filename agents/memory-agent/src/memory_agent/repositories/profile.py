@@ -11,7 +11,12 @@ from memory_agent.models.profile import (
     ProfileCriteriaSkillModel,
     ProfileModel,
 )
-from memory_agent.schemas.common import TJM, CriteresDeQualification, LocalisationPreference, PeriodeDisponibilite
+from memory_agent.schemas.common import (
+    TJM,
+    CriteresDeQualification,
+    LocalisationPreference,
+    PeriodeDisponibilite,
+)
 from memory_agent.schemas.profile import CompetenceProfil, Experience, Profile
 
 
@@ -48,7 +53,9 @@ class SqlAlchemyProfileRepository:
 
         model.criteres_tjm_min = profil.criteres_qualification.tjm_min
         model.criteres_remote_requis = profil.criteres_qualification.remote_requis
-        model.criteres_types_contrat_acceptes = [t.value for t in profil.criteres_qualification.types_contrat_acceptes]
+        model.criteres_types_contrat_acceptes = [
+            t.value for t in profil.criteres_qualification.types_contrat_acceptes
+        ]
         model.criteres_secteurs_exclus = profil.criteres_qualification.secteurs_exclus
 
         self._sync_experiences(model, profil.experiences)
@@ -99,10 +106,18 @@ class SqlAlchemyProfileRepository:
         new_list: list[ProfileCriteriaSkillModel] = []
         for skill_id in criteres.skills_recherches:
             key = (skill_id, TypeCritereSkill.RECHERCHE)
-            new_list.append(existing_by_key.get(key, ProfileCriteriaSkillModel(skill_id=skill_id, type=TypeCritereSkill.RECHERCHE)))
+            new_list.append(
+                existing_by_key.get(
+                    key, ProfileCriteriaSkillModel(skill_id=skill_id, type=TypeCritereSkill.RECHERCHE)
+                )
+            )
         for skill_id in criteres.skills_exclus:
             key = (skill_id, TypeCritereSkill.EXCLU)
-            new_list.append(existing_by_key.get(key, ProfileCriteriaSkillModel(skill_id=skill_id, type=TypeCritereSkill.EXCLU)))
+            new_list.append(
+                existing_by_key.get(
+                    key, ProfileCriteriaSkillModel(skill_id=skill_id, type=TypeCritereSkill.EXCLU)
+                )
+            )
         model.criteria_skills = new_list
 
     @staticmethod
@@ -127,7 +142,9 @@ class SqlAlchemyProfileRepository:
             criteres_qualification=CriteresDeQualification(
                 tjm_min=model.criteres_tjm_min,
                 remote_requis=model.criteres_remote_requis,
-                skills_recherches=[c.skill_id for c in model.criteria_skills if c.type == TypeCritereSkill.RECHERCHE],
+                skills_recherches=[
+                    c.skill_id for c in model.criteria_skills if c.type == TypeCritereSkill.RECHERCHE
+                ],
                 skills_exclus=[c.skill_id for c in model.criteria_skills if c.type == TypeCritereSkill.EXCLU],
                 types_contrat_acceptes=model.criteres_types_contrat_acceptes or [],
                 secteurs_exclus=model.criteres_secteurs_exclus or [],

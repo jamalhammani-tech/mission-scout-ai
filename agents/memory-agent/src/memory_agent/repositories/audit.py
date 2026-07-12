@@ -54,7 +54,10 @@ class SqlAlchemyAuditEventRepository:
     def par_acteur(self, acteur: Acteur) -> list[AuditEvent]:
         stmt = (
             select(AuditEventModel)
-            .where(AuditEventModel.acteur_type == acteur.type, AuditEventModel.acteur_identifiant == acteur.identifiant)
+            .where(
+                AuditEventModel.acteur_type == acteur.type,
+                AuditEventModel.acteur_identifiant == acteur.identifiant,
+            )
             .order_by(AuditEventModel.horodatage)
         )
         return [self._to_schema(m) for m in self.session.execute(stmt).scalars().all()]

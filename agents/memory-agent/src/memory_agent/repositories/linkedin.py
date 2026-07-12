@@ -53,7 +53,9 @@ class SqlAlchemyLinkedInPostRepository:
         return [self._to_schema(m) for m in self.session.execute(stmt).scalars().all()]
 
     def par_statut(self, user_id: uuid.UUID, statut: StatutPost) -> list[LinkedInPost]:
-        stmt = select(LinkedInPostModel).where(LinkedInPostModel.user_id == user_id, LinkedInPostModel.statut == statut)
+        stmt = select(LinkedInPostModel).where(
+            LinkedInPostModel.user_id == user_id, LinkedInPostModel.statut == statut
+        )
         return [self._to_schema(m) for m in self.session.execute(stmt).scalars().all()]
 
     def sauvegarder(self, post: LinkedInPost) -> LinkedInPost:

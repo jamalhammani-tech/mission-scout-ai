@@ -14,16 +14,16 @@ from memory_agent.repositories.skill import SqlAlchemySkillRepository
 from memory_agent.repositories.user import SqlAlchemyUserRepository
 
 __all__ = [
-    "SqlAlchemyUserRepository",
-    "SqlAlchemyProfileRepository",
-    "SqlAlchemySkillRepository",
-    "SqlAlchemyCompanyRepository",
-    "SqlAlchemyMissionRepository",
+    "SqlAlchemyAuditEventRepository",
     "SqlAlchemyCandidatureRepository",
+    "SqlAlchemyCompanyRepository",
     "SqlAlchemyContactRepository",
     "SqlAlchemyDocumentRepository",
-    "SqlAlchemyLinkedInProfileRepository",
-    "SqlAlchemyLinkedInPostRepository",
     "SqlAlchemyLinkedInConversationRepository",
-    "SqlAlchemyAuditEventRepository",
+    "SqlAlchemyLinkedInPostRepository",
+    "SqlAlchemyLinkedInProfileRepository",
+    "SqlAlchemyMissionRepository",
+    "SqlAlchemyProfileRepository",
+    "SqlAlchemySkillRepository",
+    "SqlAlchemyUserRepository",
 ]
