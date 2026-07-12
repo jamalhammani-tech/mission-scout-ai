@@ -66,3 +66,32 @@ repos:
         files: ^agents/cv-agent/(src|tests)/.*\.py$
         pass_filenames: false
         stages: [pre-push]
+
+      - id: ruff-check-mission-agent
+        name: ruff check (mission-agent)
+        entry: bash -c 'cd agents/mission-agent && uv run ruff check --fix'
+        language: system
+        files: ^agents/mission-agent/.*\.py$
+        pass_filenames: false
+
+      - id: ruff-format-mission-agent
+        name: ruff format (mission-agent)
+        entry: bash -c 'cd agents/mission-agent && uv run ruff format'
+        language: system
+        files: ^agents/mission-agent/.*\.py$
+        pass_filenames: false
+
+      - id: mypy-mission-agent
+        name: mypy (mission-agent)
+        entry: bash -c 'cd agents/mission-agent && uv run mypy src tests'
+        language: system
+        files: ^agents/mission-agent/(src|tests)/.*\.py$
+        pass_filenames: false
+
+      - id: pytest-mission-agent
+        name: pytest (mission-agent)
+        entry: bash -c 'cd agents/mission-agent && uv run pytest'
+        language: system
+        files: ^agents/mission-agent/(src|tests)/.*\.py$
+        pass_filenames: false
+        stages: [pre-push]

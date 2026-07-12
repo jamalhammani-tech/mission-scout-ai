@@ -11,7 +11,7 @@ Un ensemble d'agents spécialisés, coordonnés, qui partagent une mémoire comm
 ```
 JamalAI/
 ├── agents/             # Un agent = une responsabilité métier
-│   ├── mission-agent/      # Recherche et qualification de missions/offres
+│   ├── mission-agent/      # Career Scout Agent : import, analyse et scoring de missions (implémenté)
 │   ├── linkedin-agent/     # Optimisation profil + contenu LinkedIn
 │   ├── cv-agent/           # Import/analyse de CV (implémenté) + génération/adaptation par mission (à venir)
 │   ├── recruiter-agent/    # Suivi et relance des recruteurs/candidatures
@@ -43,6 +43,7 @@ JamalAI/
 
 - `memory-agent` : couche Domain + Persistence (modèles SQLAlchemy 2, schémas Pydantic v2, migrations Alembic, repositories), outillage qualité (Ruff, MyPy strict, pytest, pre-commit, CI GitHub Actions, logging structuré, configuration centralisée par environnement) et couche Services métier (10 services, règles métier, exceptions explicites, traçabilité `AuditEvent`). Voir `agents/memory-agent/README.md`, `docs/domain-model.md` et `docs/adr/`.
 - `cv-agent` : premier cas d'usage complet du produit — `uv run import-cv mon_cv.pdf` importe un CV (PDF/DOCX), l'analyse via l'API Anthropic, et alimente le profil (compétences, expériences) via les Services du Memory Agent. Voir `agents/cv-agent/README.md`.
+- `mission-agent` (Career Scout Agent, Sprint 5.1) : `uv run scout import-mission --url ... | --texte ...` importe une annonce de mission, l'analyse via l'API Anthropic, calcule un score de matching avec le profil (compétences + TJM), identifie les compétences manquantes, enregistre la mission qualifiée dans le Memory Agent et affiche un rapport (score, points forts, écarts, décision Postuler/À étudier/À ignorer). Aucune action de candidature ou de prise de contact n'est automatisée. Voir `agents/mission-agent/README.md`.
 - Toujours aucun endpoint FastAPI ni interface utilisateur. Les autres agents restent non implémentés.
 
 ## Prochaines étapes proposées
