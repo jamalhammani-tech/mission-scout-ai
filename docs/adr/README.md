@@ -11,4 +11,5 @@ Depuis la validation du domain model (`docs/domain-model.md`, Sprint 2), **toute
 
 ## Index
 
-- [0001 — Stack et persistance du Memory Agent](0001-stack-persistence-memory-agent.md)
+- [0001 — Stack et persistance du Memory Agent](0001-stack-persistence-memory-agent.md) — partiellement remplacé par 0002
+- [0002 — PostgreSQL via docker-compose, SQLite réservé aux tests unitaires](0002-postgresql-docker-compose.md)

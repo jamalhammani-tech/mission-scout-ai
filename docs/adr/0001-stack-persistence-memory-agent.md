@@ -1,6 +1,6 @@
 # ADR 0001 — Stack et persistance du Memory Agent
 
-Statut : validé (Sprint 3, étape 1)
+Statut : validé (Sprint 3, étape 1) — **partiellement remplacé par [ADR 0002](0002-postgresql-docker-compose.md)** sur le point "Base de données" (SQLite par défaut → PostgreSQL via docker-compose, SQLite conservé pour les tests unitaires uniquement). Le reste de cet ADR (uv, UUID, enums portables, table de tags polymorphe, AuditEvent append-only, repositories en `Protocol`) reste en vigueur.
 
 ## Contexte
 

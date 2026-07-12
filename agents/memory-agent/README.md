@@ -4,7 +4,7 @@
 
 Source de vérité unique sur le profil professionnel de Jamal, ses objectifs de mission, ses préférences, et l'historique de ses candidatures. Les autres agents la consultent ; aucun ne duplique cet état.
 
-Modèle de domaine de référence : [`docs/domain-model.md`](../../docs/domain-model.md). Choix techniques : [`docs/adr/0001-stack-persistence-memory-agent.md`](../../docs/adr/0001-stack-persistence-memory-agent.md).
+Modèle de domaine de référence : [`docs/domain-model.md`](../../docs/domain-model.md). Choix techniques : [`docs/adr/0001-stack-persistence-memory-agent.md`](../../docs/adr/0001-stack-persistence-memory-agent.md), [`docs/adr/0002-postgresql-docker-compose.md`](../../docs/adr/0002-postgresql-docker-compose.md).
 
 ## Contenu géré
 
@@ -27,12 +27,13 @@ Couche Domain + Persistence en place (aucun endpoint, aucun service métier, auc
 ## Développement
 
 ```bash
+docker compose up -d           # démarre PostgreSQL (docker-compose.yml à la racine du repo)
 cd agents/memory-agent
 uv sync                        # installe les dépendances
-uv run alembic upgrade head    # applique les migrations (SQLite par défaut : data/memory-agent.db)
+uv run alembic upgrade head    # applique les migrations
 ```
 
-`DATABASE_URL` (dans `config/.env`, voir `config/.env.example`) permet de pointer vers un autre moteur sans changer le code.
+`DATABASE_URL` (dans `config/.env`, voir `config/.env.example`) pointe par défaut vers le PostgreSQL du docker-compose local. SQLite (`sqlite:///:memory:`, constante `TEST_DATABASE_URL`) est réservé aux tests unitaires — voir [ADR 0002](../../docs/adr/0002-postgresql-docker-compose.md).
 
 ## Prochaine étape
 
