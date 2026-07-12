@@ -41,7 +41,7 @@ JamalAI/
 
 ## État actuel
 
-`memory-agent` (Sprint 3.3) : couche Domain + Persistence (modèles SQLAlchemy 2, schémas Pydantic v2, migrations Alembic, repositories) complétée par l'outillage qualité — Ruff, MyPy strict, pytest, pre-commit, CI GitHub Actions, logging structuré, configuration centralisée par environnement (`pydantic-settings`). Voir `agents/memory-agent/README.md`, `docs/domain-model.md` et `docs/adr/`. Pas encore d'endpoint, de service métier ni de logique IA. Les autres agents restent non implémentés.
+`memory-agent` (Sprint 4) : couche Domain + Persistence (modèles SQLAlchemy 2, schémas Pydantic v2, migrations Alembic, repositories), outillage qualité (Ruff, MyPy strict, pytest, pre-commit, CI GitHub Actions, logging structuré, configuration centralisée par environnement) et désormais la couche **Services métier** (10 services, règles métier, exceptions explicites, traçabilité `AuditEvent`). Voir `agents/memory-agent/README.md`, `docs/domain-model.md` et `docs/adr/`. Pas encore d'endpoint FastAPI ni de logique IA. Les autres agents restent non implémentés.
 
 ## Prochaines étapes proposées
 

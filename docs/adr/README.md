@@ -14,3 +14,4 @@ Depuis la validation du domain model (`docs/domain-model.md`, Sprint 2), **toute
 - [0001 — Stack et persistance du Memory Agent](0001-stack-persistence-memory-agent.md) — partiellement remplacé par 0002
 - [0002 — PostgreSQL via docker-compose, SQLite réservé aux tests unitaires](0002-postgresql-docker-compose.md)
 - [0003 — Developer Experience & Quality (Sprint 3.3)](0003-developer-experience-quality.md)
+- [0004 — Services métier (Sprint 4)](0004-services-metier.md)

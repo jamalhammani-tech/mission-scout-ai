@@ -254,6 +254,7 @@ Invariant : **append-only** — un `AuditEvent` ne se modifie ni ne se supprime 
 - `CompétenceProfilAjoutée` / `CompétenceProfilRetirée`
 - `ExpérienceAjoutée`
 - `CritèresDeQualificationModifiés`
+- `PréférencesDeMissionModifiées` *(ajouté Sprint 4 — le cas d'usage `DéfinirPréférencesDeMission` §12 n'avait pas d'événement correspondant)*
 
 **Référentiels**
 - `SkillCréé` / `SkillFusionné`

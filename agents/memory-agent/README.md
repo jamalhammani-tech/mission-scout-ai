@@ -4,7 +4,7 @@
 
 Source de vérité unique sur le profil professionnel de Jamal, ses objectifs de mission, ses préférences, et l'historique de ses candidatures. Les autres agents la consultent ; aucun ne duplique cet état.
 
-Modèle de domaine de référence : [`docs/domain-model.md`](../../docs/domain-model.md). Choix techniques : [`docs/adr/`](../../docs/adr/) (0001 stack/persistence, 0002 PostgreSQL/docker-compose, 0003 Developer Experience & Quality).
+Modèle de domaine de référence : [`docs/domain-model.md`](../../docs/domain-model.md). Choix techniques : [`docs/adr/`](../../docs/adr/) (0001 stack/persistence, 0002 PostgreSQL/docker-compose, 0003 Developer Experience & Quality, 0004 Services métier).
 
 ## Contenu géré
 
@@ -15,17 +15,19 @@ Modèle de domaine de référence : [`docs/domain-model.md`](../../docs/domain-m
 - Présence LinkedIn (profil, posts, conversations).
 - Tags transverses et traçabilité (`AuditEvent`).
 
-## Statut — Sprint 3.3 (Developer Experience & Quality)
+## Statut — Sprint 4 (Services métier)
 
-Couche Domain + Persistence (Sprint 3.2) inchangée, complétée par l'outillage qualité (aucun endpoint, aucun service métier, aucune logique IA à ce stade) :
+Couche Domain + Persistence (Sprint 3.2) et outillage qualité (Sprint 3.3) inchangés, complétés par la couche Services (aucun endpoint FastAPI, aucune logique IA, aucune interface utilisateur à ce stade) :
 
 - Modèles SQLAlchemy 2.0 : `src/memory_agent/models/`
 - Schémas Pydantic v2 : `src/memory_agent/schemas/`
 - Repositories (interfaces `Protocol` + implémentation SQLAlchemy) : `src/memory_agent/repositories/`
+- **Services métier** (règles métier, exceptions explicites, traçabilité `AuditEvent`) : `src/memory_agent/services/` — `UserService`, `ProfileService`, `SkillService`, `CompanyService`, `MissionService`, `ApplicationService`, `ContactService`, `DocumentService`, `LinkedInService`, `AuditService`
+- Exceptions métier : `src/memory_agent/exceptions.py`
 - Migration Alembic initiale : `migrations/versions/`
 - Configuration centralisée par environnement (`development`/`test`/`production`) : `src/memory_agent/settings.py`
 - Logging structuré JSON, configuration centralisée : `src/memory_agent/logging_config.py`
-- Suite de tests unitaires : `tests/` (SQLite en mémoire, voir ADR 0002/0003)
+- Suite de tests unitaires : `tests/` (repositories + services, SQLite en mémoire, voir ADR 0002/0003/0004) — 89 tests
 - Qualité : Ruff (lint + format), MyPy (strict), pre-commit, CI GitHub Actions
 
 ## Développement
@@ -58,4 +60,4 @@ Ruff et MyPy tournent à chaque commit ; Pytest tourne avant chaque push (suite 
 
 ## Prochaine étape
 
-Cas d'usage (couche service) au-dessus des repositories : validation des transitions de statut, déduplication `Skill`/`Company` à l'écriture, émission des événements métier / `AuditEvent`. Endpoints FastAPI et logique IA hors périmètre pour l'instant.
+Endpoints FastAPI exposant les services (Sprint 5) — logique IA toujours hors périmètre pour l'instant.
