@@ -38,6 +38,16 @@ def test_consulter_user_absent_leve_not_found(service: UserService) -> None:
         service.consulter_user(uuid.uuid4())
 
 
+def test_trouver_par_email(service: UserService, acteur: Acteur) -> None:
+    assert service.trouver_par_email("jamal@example.com") is None
+
+    user = service.creer_user(email="jamal@example.com", nom="Jamal", acteur=acteur)
+    trouve = service.trouver_par_email("jamal@example.com")
+
+    assert trouve is not None
+    assert trouve.id == user.id
+
+
 def test_desactiver_user(
     service: UserService, audit_repo: SqlAlchemyAuditEventRepository, acteur: Acteur
 ) -> None:

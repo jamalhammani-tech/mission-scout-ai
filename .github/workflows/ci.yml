@@ -6,11 +6,15 @@ on:
 
 jobs:
   quality:
-    name: Ruff, MyPy, Pytest (memory-agent)
+    name: Ruff, MyPy, Pytest (${{ matrix.agent }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        agent: [memory-agent, cv-agent]
     defaults:
       run:
-        working-directory: agents/memory-agent
+        working-directory: agents/${{ matrix.agent }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

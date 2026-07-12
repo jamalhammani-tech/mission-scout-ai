@@ -13,7 +13,7 @@ JamalAI/
 ├── agents/             # Un agent = une responsabilité métier
 │   ├── mission-agent/      # Recherche et qualification de missions/offres
 │   ├── linkedin-agent/     # Optimisation profil + contenu LinkedIn
-│   ├── cv-agent/           # Génération/adaptation de CV par mission
+│   ├── cv-agent/           # Import/analyse de CV (implémenté) + génération/adaptation par mission (à venir)
 │   ├── recruiter-agent/    # Suivi et relance des recruteurs/candidatures
 │   ├── interview-agent/    # Préparation d'entretiens (Q&A, simulation)
 │   ├── dashboard-agent/    # Vue d'ensemble : pipeline, métriques, statut
@@ -41,7 +41,9 @@ JamalAI/
 
 ## État actuel
 
-`memory-agent` (Sprint 4) : couche Domain + Persistence (modèles SQLAlchemy 2, schémas Pydantic v2, migrations Alembic, repositories), outillage qualité (Ruff, MyPy strict, pytest, pre-commit, CI GitHub Actions, logging structuré, configuration centralisée par environnement) et désormais la couche **Services métier** (10 services, règles métier, exceptions explicites, traçabilité `AuditEvent`). Voir `agents/memory-agent/README.md`, `docs/domain-model.md` et `docs/adr/`. Pas encore d'endpoint FastAPI ni de logique IA. Les autres agents restent non implémentés.
+- `memory-agent` : couche Domain + Persistence (modèles SQLAlchemy 2, schémas Pydantic v2, migrations Alembic, repositories), outillage qualité (Ruff, MyPy strict, pytest, pre-commit, CI GitHub Actions, logging structuré, configuration centralisée par environnement) et couche Services métier (10 services, règles métier, exceptions explicites, traçabilité `AuditEvent`). Voir `agents/memory-agent/README.md`, `docs/domain-model.md` et `docs/adr/`.
+- `cv-agent` : premier cas d'usage complet du produit — `uv run import-cv mon_cv.pdf` importe un CV (PDF/DOCX), l'analyse via l'API Anthropic, et alimente le profil (compétences, expériences) via les Services du Memory Agent. Voir `agents/cv-agent/README.md`.
+- Toujours aucun endpoint FastAPI ni interface utilisateur. Les autres agents restent non implémentés.
 
 ## Prochaines étapes proposées
 

@@ -36,6 +36,10 @@ class UserService:
             raise EntityNotFoundError("User", user_id)
         return user
 
+    def trouver_par_email(self, email: str) -> User | None:
+        """Lecture tolérante (pas d'exception) — utile pour un flux get-or-create côté appelant."""
+        return self._users.par_email(email)
+
     def desactiver_user(self, user_id: uuid.UUID, *, acteur: Acteur) -> User:
         user = self.consulter_user(user_id)
         user.statut_compte = StatutCompte.DESACTIVE

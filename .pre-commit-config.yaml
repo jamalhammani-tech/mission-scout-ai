@@ -37,3 +37,32 @@ repos:
         files: ^agents/memory-agent/(src|tests)/.*\.py$
         pass_filenames: false
         stages: [pre-push]
+
+      - id: ruff-check-cv-agent
+        name: ruff check (cv-agent)
+        entry: bash -c 'cd agents/cv-agent && uv run ruff check --fix'
+        language: system
+        files: ^agents/cv-agent/.*\.py$
+        pass_filenames: false
+
+      - id: ruff-format-cv-agent
+        name: ruff format (cv-agent)
+        entry: bash -c 'cd agents/cv-agent && uv run ruff format'
+        language: system
+        files: ^agents/cv-agent/.*\.py$
+        pass_filenames: false
+
+      - id: mypy-cv-agent
+        name: mypy (cv-agent)
+        entry: bash -c 'cd agents/cv-agent && uv run mypy src tests'
+        language: system
+        files: ^agents/cv-agent/(src|tests)/.*\.py$
+        pass_filenames: false
+
+      - id: pytest-cv-agent
+        name: pytest (cv-agent)
+        entry: bash -c 'cd agents/cv-agent && uv run pytest'
+        language: system
+        files: ^agents/cv-agent/(src|tests)/.*\.py$
+        pass_filenames: false
+        stages: [pre-push]
