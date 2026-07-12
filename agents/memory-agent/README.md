@@ -4,16 +4,36 @@
 
 Source de vérité unique sur le profil professionnel de Jamal, ses objectifs de mission, ses préférences, et l'historique de ses candidatures. Les autres agents la consultent ; aucun ne duplique cet état.
 
+Modèle de domaine de référence : [`docs/domain-model.md`](../../docs/domain-model.md). Choix techniques : [`docs/adr/0001-stack-persistence-memory-agent.md`](../../docs/adr/0001-stack-persistence-memory-agent.md).
+
 ## Contenu géré
 
+- Comptes utilisateurs (`User`) et rattachement de toute donnée personnelle à leur propriétaire.
 - Profil professionnel (compétences, expériences, TJM cible, contraintes géographiques/remote).
-- Critères de qualification des missions.
-- Historique des interactions (missions vues, candidatures, entretiens).
+- Référentiels partagés : compétences (`Skill`), entreprises (`Company`).
+- Missions, candidatures, entretiens, contacts, documents de candidature.
+- Présence LinkedIn (profil, posts, conversations).
+- Tags transverses et traçabilité (`AuditEvent`).
 
-## Sortie
+## Statut — Sprint 3, étape 1
 
-- API/interface interne consultée par les autres agents (à spécifier).
+Couche Domain + Persistence en place (aucun endpoint, aucun service métier, aucune logique IA à ce stade) :
 
-## Statut
+- Modèles SQLAlchemy 2.0 : `src/memory_agent/models/`
+- Schémas Pydantic v2 : `src/memory_agent/schemas/`
+- Repositories (interfaces `Protocol` + implémentation SQLAlchemy) : `src/memory_agent/repositories/`
+- Migration Alembic initiale : `migrations/versions/`
 
-Non implémenté. **Premier agent à construire** : les autres en dépendent.
+## Développement
+
+```bash
+cd agents/memory-agent
+uv sync                        # installe les dépendances
+uv run alembic upgrade head    # applique les migrations (SQLite par défaut : data/memory-agent.db)
+```
+
+`DATABASE_URL` (dans `config/.env`, voir `config/.env.example`) permet de pointer vers un autre moteur sans changer le code.
+
+## Prochaine étape
+
+Cas d'usage (couche service) au-dessus des repositories : validation des transitions de statut, déduplication `Skill`/`Company` à l'écriture, émission des événements métier / `AuditEvent`. Endpoints FastAPI et logique IA hors périmètre pour l'instant.

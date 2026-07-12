@@ -41,7 +41,7 @@ JamalAI/
 
 ## État actuel
 
-Squelette de projet uniquement : structure de dossiers, README, CLAUDE.md. Aucun agent n'est encore implémenté.
+`memory-agent` (Sprint 3, étape 1) : couche Domain + Persistence en place (modèles SQLAlchemy 2, schémas Pydantic v2, migrations Alembic, repositories) — voir `agents/memory-agent/README.md`, `docs/domain-model.md` et `docs/adr/`. Pas encore d'endpoint, de service métier ni de logique IA. Les autres agents restent non implémentés.
 
 ## Prochaines étapes proposées
 
