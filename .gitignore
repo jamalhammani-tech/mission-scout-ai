@@ -1,0 +1,17 @@
+# Secrets
+.env
+config/*.local.*
+
+# Données personnelles runtime
+data/**
+!data/README.md
+
+# Logs
+logs/**
+!logs/.gitkeep
+
+# Dépendances (à ajuster selon la stack choisie)
+node_modules/
+__pycache__/
+*.pyc
+.venv/
