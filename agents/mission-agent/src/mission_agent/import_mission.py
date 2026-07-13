@@ -79,6 +79,7 @@ def importer_mission(
         mission_repo, SqlAlchemyCompanyRepository(session), SqlAlchemySkillRepository(session), audit_repo
     )
 
+    logger.info("Chargement du profil utilisateur (%s)", email)
     user = user_service.trouver_par_email(email)
     if user is None:
         raise ValueError(
@@ -92,16 +93,29 @@ def importer_mission(
         raise ValueError(
             f"Aucun profil trouvé pour {email}. Importe d'abord ton CV (`uv run import-cv ...`)."
         ) from exc
+    logger.info(
+        "Profil chargé : %d compétence(s) enregistrée(s), tjm_min=%s",
+        len(profil.competences),
+        profil.criteres_qualification.tjm_min,
+    )
 
+    logger.info("Lecture des compétences du Memory Agent (%d à résoudre)", len(analyse.competences_requises))
     competences_resolues = _resoudre_competences(analyse, skill_service)
     skill_ids_profil = {c.skill_id for c in profil.competences}
+    logger.info("Compétences résolues côté Memory Agent : %d", len(competences_resolues))
+
+    logger.info("Début du scoring")
     rapport = calculer_matching(
         analyse=analyse,
         competences_resolues=competences_resolues,
         skill_ids_profil=skill_ids_profil,
         criteres=profil.criteres_qualification,
     )
+    logger.info(
+        "Scoring terminé : score=%.1f %%, décision=%s", rapport.score_pourcent, rapport.decision.value
+    )
 
+    logger.info("Persistance de la mission")
     company = company_service.referencer_ou_reutiliser(
         nom=analyse.entreprise or "Entreprise non précisée", ville=analyse.lieu, acteur=ACTEUR_MISSION_AGENT
     )
@@ -139,7 +153,9 @@ def importer_mission(
             motif=f"Décision Career Scout Agent : {rapport.decision.value}",
             acteur=ACTEUR_MISSION_AGENT,
         )
+    logger.info("Mission persistée (id=%s, déjà connue=%s)", mission.id, mission_deja_connue)
 
+    logger.info("Génération du rapport final")
     return ResultatImportMission(
         user=user,
         mission=mission,

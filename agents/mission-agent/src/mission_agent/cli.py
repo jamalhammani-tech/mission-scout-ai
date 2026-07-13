@@ -1,7 +1,9 @@
 """Point d'entrée `uv run scout import-mission --url ... | --texte ...`."""
 
 import argparse
+import logging
 import sys
+import traceback
 
 import anthropic
 from memory_agent.db import session_scope
@@ -12,6 +14,8 @@ from sqlalchemy.exc import OperationalError
 from mission_agent.import_mission import ResultatImportMission, importer_mission
 from mission_agent.llm_analysis import AnthropicAnalyseurMission
 from mission_agent.settings import get_settings
+
+logger = logging.getLogger(__name__)
 
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -117,6 +121,12 @@ def _commande_import_mission(args: argparse.Namespace) -> None:
         sys.exit(1)
     except anthropic.APIError as exc:
         print(f"Erreur : l'appel à l'API Anthropic a échoué ({exc}).", file=sys.stderr)
+        sys.exit(1)
+    except Exception:
+        # Filet de sécurité : toute exception non anticipée doit être visible, jamais silencieuse.
+        logger.exception("Erreur inattendue pendant import-mission")
+        print("Erreur inattendue — traceback complet :", file=sys.stderr)
+        traceback.print_exc()
         sys.exit(1)
 
     _afficher_resultat(resultat)
